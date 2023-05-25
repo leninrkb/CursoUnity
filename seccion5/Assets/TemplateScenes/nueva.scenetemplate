@@ -15,7 +15,7 @@ MonoBehaviour:
   templateScene: {fileID: 102900000, guid: ce6da374ccf985843aabf928cbc9efae, type: 3}
   templateName: 
   description: 
-  preview: {fileID: 0}
+  preview: {fileID: 8397470542090993003}
   dependencies: []
   templatePipeline: {fileID: 0}
   badge: {fileID: 0}
