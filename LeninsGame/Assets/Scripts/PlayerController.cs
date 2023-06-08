@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private RigidBody2D rb;
-    public float velocidad_de_movimiento = 10;
+    private Rigidbody2D rb;
+    float velocidad_de_movimiento = 10;
 
-    private void Awake(){
-        rb = GetComponent<RigidBody2D>();
+    private void Awake() {
+        rb = GetComponent<Rigidbody2D>();
     }
     // Start is called before the first frame update
     void Start()
@@ -22,15 +22,13 @@ public class PlayerController : MonoBehaviour
         movimiento();
     }
 
-
-    private void movimiento(){
+    private void movimiento() { 
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
-        Vector2 direccion = new Vector2(x,y);
+        Vector2 direccion = new Vector2(x, y);
         caminar(direccion);
     }
-
-    private void caminar(Vector2 direccion){
+    private void caminar(Vector2 direccion) {
         rb.velocity = new Vector2(direccion.x * velocidad_de_movimiento, rb.velocity.y);
     }
 }
