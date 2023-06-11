@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Vector2 direccion;
+    private Animator animtr;
 
     [Header("estadisticas")]
     public float velocidad_de_movimiento = 6;
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
+        animtr = GetComponent<Animator>();
     }
     // Start is called before the first frame update
     void Start()
@@ -42,10 +44,14 @@ public class PlayerController : MonoBehaviour
         direccion = new Vector2(x, y);
         caminar();
         mejorar_salto();
+        if(en_suelo){
+            animtr.SetBool("caer",false);
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (en_suelo)
             {
+                animtr.SetBool("saltar",true);
                 saltar();
             }
         }
@@ -68,6 +74,11 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(direccion.x * velocidad_de_movimiento, rb.velocity.y);
             if (direccion != Vector2.zero)
             {
+                if(!en_suelo){
+                    animtr.SetBool("caer",true);
+                }else{
+                    animtr.SetBool("caminar",true);
+                }
                 if (direccion.x < 0 && transform.localScale.x > 0)
                 {
                     transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
@@ -75,10 +86,18 @@ public class PlayerController : MonoBehaviour
                 if (direccion.x > 0 && transform.localScale.x < 0) {
                     transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
                 }
+            }else{
+                animtr.SetBool("caminar",false);
             }
         }
     }
     private void agarres() {
         en_suelo = Physics2D.OverlapCircle((Vector2)transform.position + abajo, radio_de_colision, layer_piso);
+    }
+
+
+    public void terminar_salto(){
+        animtr.SetBool("saltar",false);
+        animtr.SetBool("caer",true);
     }
 }
