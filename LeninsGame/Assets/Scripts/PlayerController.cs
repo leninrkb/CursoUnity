@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Vector2 direccion;
-    private Animator animtr;
+    private Animator animator;
 
     [Header("estadisticas")]
     public float velocidad_de_movimiento = 6;
@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
-        animtr = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
     // Start is called before the first frame update
     void Start()
@@ -42,16 +42,19 @@ public class PlayerController : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
         direccion = new Vector2(x, y);
+        float velocidady = rb.velocity.y > 0 ? 1 : -1;
         caminar();
         mejorar_salto();
-        if(en_suelo){
-            animtr.SetBool("caer",false);
+        if(!en_suelo){
+            animator.SetFloat("velocidad_vertical",velocidady);
+        }else if (en_suelo && velocidady == -1){
+            animator.SetBool("saltar",false);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (en_suelo)
             {
-                animtr.SetBool("saltar",true);
+                animator.SetBool("saltar",true);
                 saltar();
             }
         }
@@ -74,10 +77,8 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(direccion.x * velocidad_de_movimiento, rb.velocity.y);
             if (direccion != Vector2.zero)
             {
-                if(!en_suelo){
-                    animtr.SetBool("caer",true);
-                }else{
-                    animtr.SetBool("caminar",true);
+                if(en_suelo){
+                    animator.SetBool("caminar",true);
                 }
                 if (direccion.x < 0 && transform.localScale.x > 0)
                 {
@@ -87,17 +88,11 @@ public class PlayerController : MonoBehaviour
                     transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
                 }
             }else{
-                animtr.SetBool("caminar",false);
+                animator.SetBool("caminar",false);
             }
         }
     }
     private void agarres() {
         en_suelo = Physics2D.OverlapCircle((Vector2)transform.position + abajo, radio_de_colision, layer_piso);
-    }
-
-
-    public void terminar_salto(){
-        animtr.SetBool("saltar",false);
-        animtr.SetBool("caer",true);
     }
 }
