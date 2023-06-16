@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("estadisticas")]
     public float velocidad_de_movimiento = 6;
-    public float fuerza_de_salto = 6;
+    public float fuerza_de_salto = 10;
 
     [Header("colisiones")]
     public Vector2 abajo;
@@ -57,6 +57,9 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("saltar",true);
                 saltar();
             }
+        }
+        if(Input.GetKeyDown(KeyCode.X)){
+            Camera.main.GetComponent<RippleEffect>().Emit(transform.position);
         }
     }
     private void saltar() {
