@@ -41,10 +41,12 @@ public class PlayerController : MonoBehaviour
     private void movimiento() {
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
-        direccion = new Vector2(x, y);
         float velocidady = rb.velocity.y > 0 ? 1 : -1;
+        direccion = new Vector2(x, y);
+
         caminar();
         mejorar_salto();
+
         if(!en_suelo){
             animator.SetFloat("velocidad_vertical",velocidady);
         }else if (en_suelo && velocidady == -1){
@@ -59,6 +61,10 @@ public class PlayerController : MonoBehaviour
             }
         }
         if(Input.GetKeyDown(KeyCode.X)){
+            Camera.main.GetComponent<RippleEffect>().Emit(transform.position);
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             Camera.main.GetComponent<RippleEffect>().Emit(transform.position);
         }
     }

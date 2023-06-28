@@ -107,18 +107,18 @@ public class RippleEffect : MonoBehaviour
 
     void Update()
     {
-        // if (dropInterval > 0)
-        // {
-        //     timer += Time.deltaTime;
-        //     while (timer > dropInterval)
-        //     {
-        //         timer -= dropInterval;
-        //     }
-        // }
+        if (dropInterval > 0)
+        {
+            timer += Time.deltaTime;
+            while (timer > dropInterval)
+            {
+                timer -= dropInterval;
+            }
+        }
 
-        // foreach (var d in droplets) d.Update();
+        foreach (var d in droplets) d.Update();
 
-        // UpdateShaderParameters();
+        UpdateShaderParameters();
     }
 
     void OnRenderImage(RenderTexture source, RenderTexture destination)
