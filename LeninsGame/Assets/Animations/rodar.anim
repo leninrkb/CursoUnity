@@ -22,25 +22,25 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: 21300000, guid: 7860ddad444226ce8abb8a2fff212e2c, type: 3}
-    - time: 0.083333336
+    - time: 0.05
       value: {fileID: 21300000, guid: a1dd930fd57848d0eb8064ab3e081e86, type: 3}
-    - time: 0.16666667
+    - time: 0.1
       value: {fileID: 21300000, guid: 8e15e065b1a899f7eae7015f77e12919, type: 3}
-    - time: 0.25
+    - time: 0.15
       value: {fileID: 21300000, guid: cbc9735b3511d460abafed070f33eb17, type: 3}
-    - time: 0.33333334
+    - time: 0.2
       value: {fileID: 21300000, guid: 703956871d2dcc61895f441937575e11, type: 3}
-    - time: 0.41666666
+    - time: 0.25
       value: {fileID: 21300000, guid: 3e12c4541c926653086fc3389b54849b, type: 3}
-    - time: 0.5
+    - time: 0.3
       value: {fileID: 21300000, guid: a482f2d9f023309999959edf01ea7760, type: 3}
-    - time: 0.5833333
+    - time: 0.35
       value: {fileID: 21300000, guid: cebbef2e6fe7de263a6cf75d235f3ce6, type: 3}
-    - time: 0.6666667
+    - time: 0.4
       value: {fileID: 21300000, guid: dd205f97bd9d6e07ab3478b5d974c9a2, type: 3}
-    - time: 0.73333335
+    - time: 0.45
       value: {fileID: 21300000, guid: 9fb4eabf65d70cdb7836b3cd27773541, type: 3}
-    - time: 0.8
+    - time: 0.5
       value: {fileID: 21300000, guid: 2870b2d9cb3ffb327998d9421528afba, type: 3}
     attribute: m_Sprite
     path: 
@@ -80,7 +80,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.81666666
+    m_StopTime: 0.51666665
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -99,4 +99,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.5
+    functionName: finalizar_rodar
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
