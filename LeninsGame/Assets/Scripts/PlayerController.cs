@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [Header("estadisticas")]
     public float velocidad_de_movimiento = 6;
     public float fuerza_de_salto = 10;
+    public float velocidad_rodar = 20;
 
     [Header("colisiones")]
     public Vector2 abajo;
@@ -20,6 +21,9 @@ public class PlayerController : MonoBehaviour
     [Header("booleanos")]
     public bool se_puede_mover = true;
     public bool en_suelo = true;
+    public bool puede_rodar;
+    public bool haciendo_dash;
+    public bool tocado_suelo;
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
@@ -38,9 +42,45 @@ public class PlayerController : MonoBehaviour
         agarres();
     }
 
+    private void rodar(float x, float y){
+        animator.SetBool("rodar",true);
+        // Camera.main.GetComponent<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
+        puede_rodar = true;
+        rb.velocity = Vector2.zero;
+        rb.velocity += new Vector2(x,y).normalized * velocidad_rodar;
+        StartCoroutine(preparar_rodar());
+    }
+
+    private IEnumerator preparar_rodar(){
+        StartCoroutine(rodar_suelo());
+        rb.gravityScale = 0;
+        haciendo_dash = true;
+        yield return new WaitForSeconds(0.3f);
+        rb.gravityScale = 3;
+        haciendo_dash = false;
+    }
+
+    private IEnumerator rodar_suelo(){
+        yield return new WaitForSeconds(0.15f);
+        if(en_suelo){
+            puede_rodar = false;
+        }
+    }
+
+    private void tocar_suelo(){
+        puede_rodar = false;
+        haciendo_dash = false;
+    }
+
+    public void finalizar_rodar(){
+        animator.SetBool("rodar",false);
+    }
+
     private void movimiento() {
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
+        float x_raw = Input.GetAxisRaw("Horizontal");
+        float y_raw = Input.GetAxisRaw("Vertical");
         float velocidady = rb.velocity.y > 0 ? 1 : -1;
         direccion = new Vector2(x, y);
 
@@ -60,18 +100,27 @@ public class PlayerController : MonoBehaviour
                 saltar();
             }
         }
-        if(Input.GetKeyDown(KeyCode.X)){
-            Camera.main.GetComponent<RippleEffect>().Emit(transform.position);
+        if(Input.GetKeyDown(KeyCode.X) & !haciendo_dash){
+            if(x_raw != 0 || y_raw != 0){
+                rodar(x_raw,y_raw);
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Camera.main.GetComponent<RippleEffect>().Emit(transform.position);
+
+        if(en_suelo && !tocado_suelo){
+            tocar_suelo();
+            tocado_suelo = true;
+        }
+
+        if(!en_suelo && tocado_suelo){
+            tocado_suelo = false;
         }
     }
+
     private void saltar() {
         rb.velocity = new Vector2(direccion.x, 0);
         rb.velocity += Vector2.up * fuerza_de_salto; 
     }
+    
     private void mejorar_salto() {
         if (rb.velocity.y < 0 )
         {
@@ -81,8 +130,9 @@ public class PlayerController : MonoBehaviour
             rb.velocity += Vector2.up * Physics2D.gravity.y * (2.0f -1) * Time.deltaTime;
         }
     }
+    
     private void caminar() {
-        if (se_puede_mover) {
+        if (se_puede_mover && !haciendo_dash) {
             rb.velocity = new Vector2(direccion.x * velocidad_de_movimiento, rb.velocity.y);
             if (direccion != Vector2.zero)
             {
@@ -101,6 +151,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    
     private void agarres() {
         en_suelo = Physics2D.OverlapCircle((Vector2)transform.position + abajo, radio_de_colision, layer_piso);
     }
