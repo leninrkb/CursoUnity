@@ -34,28 +34,35 @@ public class Dispersion {
         while(pila.Count > 0){
             punto_actual = pila.Pop();
             List<int[]> nuevos = evaluar(matriz, punto_actual, factor_reduccion, orientacion_dispersion);
-            if(nuevos != null && nuevos.Count > 0){
-                foreach (int[] punto in nuevos) {
-                    pila.Push(punto);
+            if(nuevos != null){
+                if (nuevos.Count > 0) {
+                    foreach (int[] punto in nuevos) {
+                        pila.Push(punto);
+                    }
                 }
             }
         }
     }
 
     public static List<int[]> evaluar(int[,] matriz, int[] punto, float factor_reduccion, int orientacion_dispersion){
-        if(punto[0] == 0){
+        if(punto[0] <= 0){
             return null;
         }
         List<int[]> disponibles = espaciosDisponibles(matriz, punto);
-        if(disponibles != null && disponibles.Count > 0){
-            disponibles = acomodarPuntos(disponibles, orientacion_dispersion);
-            List<int[]> nuevos_puntos = new List<int[]>();
-            int nuevo_valor_punto = (int)(punto[0] * factor_reduccion);
-            foreach(int[] espacio in disponibles){
-                matriz[espacio[1],espacio[2]] = nuevo_valor_punto;
-                nuevos_puntos.Add(new int[]{nuevo_valor_punto, espacio[1], espacio[2]});
+        if (disponibles != null) {
+            if (disponibles.Count > 0) {
+                disponibles = acomodarPuntos(disponibles, orientacion_dispersion);
+                List<int[]> nuevos_puntos = new List<int[]>();
+                int nuevo_valor_punto = (int)(punto[0] * factor_reduccion);
+                if (nuevo_valor_punto > 0) {
+                    foreach (int[] espacio in disponibles) {
+                        matriz[espacio[0], espacio[1]] = nuevo_valor_punto;
+                        nuevos_puntos.Add(new int[] { nuevo_valor_punto, espacio[0], espacio[1] });
+                    }
+                    return nuevos_puntos;
+                }
+                return null;
             }
-            return nuevos_puntos;
         }
         return null;
     }
@@ -63,17 +70,18 @@ public class Dispersion {
     public static List<int[]> acomodarPuntos(List<int[]> puntos, int orientacion_dispersion){
         List<int[]> acomodados;
         if(orientacion_dispersion == 5){
-            acomodados = (List<int[]>) puntos.OrderBy(punto => rd.Next());
+            acomodados = puntos.OrderBy(punto => rd.Next()).ToList();
             return acomodados;
         }
         foreach(int[] punto in puntos){
             if(orientacion_dispersion == punto[2]){
+                int[] p = punto;
                 puntos.Remove(punto);
-                puntos.Add(punto);
+                puntos.Add(p);
                 return puntos;
             }
         }
-        return null;
+        return puntos;
     }
 
 
@@ -101,10 +109,10 @@ public class Dispersion {
     }
 
     public static bool verificarBordes(int fila, int columna, int maxfila, int maxcol){
-        if(fila - 1 < 0 || columna - 1 < 0){
+        if(fila - 1 <= 0 || columna - 1 <= 0){
             return false;
         }
-        if(maxfila + 1 > 0 || maxcol + 1 > 0){
+        if(fila + 1 >= maxfila || columna + 1 >= maxcol){
             return false;
         }
         return true;

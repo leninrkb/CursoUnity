@@ -17,13 +17,14 @@ public class Metodos : MonoBehaviour
     } 
 
 
-    public static void generarMapa(int[,] matriz, Tilemap canvas, TileBase tile){
+    public static void generarMapa(int[,] matriz, Tilemap canvas, TileBase tile, int[] rango_aceptacion){
         canvas.ClearAllTiles();
         // matriz.GetLength(0) obtengo filas y j
         // matriz.GetLength(1) obtengo columnas x i
         for (int fila = 0; fila < matriz.GetLength(0); fila++) {
             for (int columna = 0; columna < matriz.GetLength(1); columna++) {
-                if(matriz[fila,columna] == 1){
+                int valor = matriz[fila, columna];
+                if ( valor >= rango_aceptacion[0] && valor <= rango_aceptacion[1]){
                     canvas.SetTile(new Vector3Int(fila,columna,0), tile);
                 }
             }
