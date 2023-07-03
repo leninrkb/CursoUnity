@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using UnityEditor;
 
 public class Dispersion {
     public static System.Random rd = new System.Random();
@@ -68,18 +69,13 @@ public class Dispersion {
     }
 
     public static List<int[]> acomodarPuntos(List<int[]> puntos, int orientacion_dispersion){
-        List<int[]> acomodados;
-        if(orientacion_dispersion == 5){
-            acomodados = puntos.OrderBy(punto => rd.Next()).ToList();
-            return acomodados;
-        }
-        foreach(int[] punto in puntos){
-            if(orientacion_dispersion == punto[2]){
-                int[] p = punto;
-                puntos.Remove(punto);
-                puntos.Add(p);
-                return puntos;
-            }
+        switch (orientacion_dispersion) {
+            case 2:
+                puntos.Reverse(); 
+                break;
+            case 3: 
+                puntos = puntos.OrderBy(punto => rd.Next()).ToList();
+                break;
         }
         return puntos;
     }
@@ -93,9 +89,9 @@ public class Dispersion {
         if(verificarBordes(fila, columna, maxfila, maxcol)){
             List<int[]> espacios = new List<int[]>{
                 new int[]{fila - 1, columna, 1} //espacio arriba
-                ,new int[]{fila + 1, columna, 2} //abajo
-                ,new int[]{fila, columna - 1, 3} //izquierda
-                ,new int[]{fila, columna + 1, 4} //derecha
+                ,new int[]{fila, columna + 1, 2} //derecha
+                ,new int[]{fila + 1, columna, 3} //abajo
+                ,new int[]{fila, columna - 1, 4} //izquierda
             };
             List<int[]> disponibles = new List<int[]>();
             foreach(int[] espacio in espacios){

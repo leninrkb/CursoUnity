@@ -8,11 +8,9 @@ public enum Algoritmo{
     dispersion
 }
 public enum Orientacion{
-    arriba = 1,
-    abajo = 2,
-    izquierda = 3,
-    derecha = 4,
-    shuffle = 5
+    horario = 1,
+    antihorario = 2,
+    shuffle = 3
 }
 public class Generador : MonoBehaviour{
     [Header("recursos")]
