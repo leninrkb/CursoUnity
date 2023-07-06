@@ -30,6 +30,7 @@ public class Generador : MonoBehaviour{
     public float factor_reduccion = 0.900f;
     public Orientacion orientacion_dispersion = Orientacion.shuffle;
     public int[] rango_valores = {100,1000};
+    public bool centrar_punto = true;
     public int[] rango_aparicion_fila = {50,50};
     public int[] rango_aparicion_columna = {50,50};
     public int[] rango_aceptacion = { 3, 100 };
@@ -50,16 +51,16 @@ public class Generador : MonoBehaviour{
                 Metodos.generarMapa(matriz, canvas, tile, rango_aceptacion);
             break;
             case Algoritmo.dispersion:
-                Debug.Log("first");
                 matriz = Dispersion.generarMatriz(filas, columnas);
-                Debug.Log("matriz " + matriz.GetLength(0) + "" + matriz.GetLength(1));
-                int mitad_fila = matriz.GetLength(0) / 2;
-                int mitad_columna = matriz.GetLength(1) / 2;
-                rango_aparicion_fila = new int[] {mitad_fila, mitad_fila};
-                rango_aparicion_columna = new int[] {mitad_columna, mitad_columna};
+                if (centrar_punto) {
+                    int mitad_fila = matriz.GetLength(0) / 2;
+                    int mitad_columna = matriz.GetLength(1) / 2;
+                    rango_aparicion_fila = new int[]{ mitad_fila , mitad_fila};
+                    rango_aparicion_columna = new int[]{ mitad_columna , mitad_columna};
+                }
+                rango_aparicion_fila = new int[] {rango_aparicion_fila[0], rango_aparicion_fila[1]};
+                rango_aparicion_columna = new int[] {rango_aparicion_columna[0], rango_aparicion_columna[1]};
                 List<int[]> puntos = Dispersion.generarPuntos(cantidad_puntos, rango_valores, rango_aparicion_fila, rango_aparicion_columna);
-                Debug.Log("puntos " + puntos.Count);
-                Debug.Log("orientacion " + (int)orientacion_dispersion);
                 Dispersion.dispersionPila(matriz, puntos, factor_reduccion, (int)orientacion_dispersion);
                 Metodos.generarMapa(matriz, canvas, tile, rango_aceptacion);
             break;
